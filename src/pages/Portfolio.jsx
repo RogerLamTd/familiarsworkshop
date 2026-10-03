@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { asset } from '../utils/assets';
 
 // specs Portrait Size / Quote were placeholders in the original Canva export —
 // fill real values here when available.
@@ -59,11 +60,11 @@ function Gallery({ images }) {
   return (
     <>
       <div className="main">
-        <img src={`/img/${images[active].src}`} alt={images[active].alt} />
+        <img src={asset(`/img/${images[active].src}`)} alt={images[active].alt} />
       </div>
       <div className="stack">
         {rest.map((i) => (
-          <img key={i} src={`/img/${images[i].src}`} alt={images[i].alt}
+          <img key={i} src={asset(`/img/${images[i].src}`)} alt={images[i].alt}
             className="thumb" onClick={() => setActive(i)} />
         ))}
       </div>
@@ -76,7 +77,7 @@ function Case({ c }) {
     <section id={c.id} className={c.variant === 'hand' ? 'case case--hand' : 'case'}>
       <Gallery images={c.images} />
       <div className="info">
-        <h3>{c.name} <img className="deer-mark" src="/img/logo.webp" alt="" /></h3>
+        <h3>{c.name} <img className="logo" src={asset("/img/logo.webp")} alt="" /></h3>
         {c.breed && <p className="breed">{c.breed}</p>}
         {c.variant === 'full' ? (
           <>

@@ -11,7 +11,7 @@ const links = [
 function Brand() {
   return (
     <Link className="brand" to="/">
-      <img className="brand-mark" src="/img/logo.webp" alt="" />
+      <img className="brand-mark" src={asset('img/logo.webp')} alt="" />
       <span className="wordmark"><span>Familiars</span><span>Workshop</span></span>
     </Link>
   );

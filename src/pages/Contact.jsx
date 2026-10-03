@@ -1,11 +1,13 @@
+
 import MailtoForm from '../components/MailtoForm.jsx';
+import { asset } from '../utils/assets';
 
 export default function Contact() {
   return (
     <main>
       <section className="contact-hero">
         <div className="art">
-          <img src="/img/contact-hero.webp" alt="A deer beneath blossoming trees" />
+          <img src={asset("/img/contact-hero.webp")} alt="A deer beneath blossoming trees" />
           <h1 className="display">Get in touch with our craftspeople</h1>
         </div>
         <div className="panel">

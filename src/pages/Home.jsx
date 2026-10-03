@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import MailtoForm from '../components/MailtoForm.jsx';
+import { asset } from '../utils/assets';
 
 // Each frame keeps its NATURAL aspect ratio (pieces end up different widths at a
 // shared height -> size variety in the marquee). `win` = [left,top,width,height] %
@@ -42,8 +42,8 @@ function Piece({ p }) {
   return (
     <Link className="piece" to={`/portfolio${p.link}`}>
       <div className={`piece-frame ${f.mode}`} style={{ aspectRatio: f.ratio }}>
-        <img className="photo" style={photoStyle} src={`/img/${p.photo}`} alt={p.alt} />
-        <img className="frame" src={`/img/${f.img}`} alt="" />
+        <img className="photo" style={photoStyle} src={asset(`/img/${p.photo}`)} alt={p.alt} />
+        <img className="frame" src={asset(`/img/${f.img}`)} alt="" />
       </div>
       <div className="piece-cap">
         <div className="name">{p.name}</div>
@@ -65,7 +65,7 @@ export default function Home() {
           <h1 className="display">Every talisman begins with a face you know by heart.</h1>
         </div>
         <div className="hero-photo-wrap">
-          <img className="hero-photo" src="/img/home-hero.webp" alt="Children with their dog" />
+          <img className="hero-photo" src={asset("/img/home-hero.webp")} alt="Children with their dog" />
         </div>
       </section>
 
@@ -110,8 +110,8 @@ export default function Home() {
 
       {/* BESPOKE PROMISE */}
       <section className="bespoke">
-        <img className="blossom l" src="/img/blossom-left.webp" alt="" />
-        <img className="blossom r" src="/img/blossom-right.webp" alt="" />
+        <img className="blossom l" src={asset("/img/blossom-left.webp")} alt="" />
+        <img className="blossom r" src={asset("/img/blossom-right.webp")} alt="" />
         <div className="container">
           <svg className="seal" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="4" fill="none" stroke="currentColor" strokeWidth="2.5" /><path d="M11 11h18v18H11z M11 20h18 M20 11v18" fill="none" stroke="currentColor" strokeWidth="2.5" /></svg>
           <p className="promise-label">our <b>Bespoke</b> promise to you</p>
@@ -121,7 +121,7 @@ export default function Home() {
 
       {/* READY TO BEGIN */}
       <section className="container ready">
-        <img className="oval" src="/img/oval-necklace.webp" alt="Familiar pendant on a chain" />
+        <img className="oval" src={asset("/img/oval-necklace.webp")} alt="Familiar pendant on a chain" />
         <div>
           <h2>Ready to <b>Begin?</b></h2>
           <p>Every Familiar talisman begins with an enquiry.<br />
@@ -134,7 +134,7 @@ export default function Home() {
 
       {/* NOTE FROM THE WORKSHOP */}
       <section className="note">
-        <img src="/img/home-story.webp" alt="" />
+        <img src={asset("/img/home-story.webp")} alt="" />
         <div className="inner">
           <span className="eyebrow">A note from the workshop</span>
           <p>We believe that the animals beside us are more than companions.</p>
