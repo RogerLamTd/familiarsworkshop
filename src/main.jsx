@@ -6,7 +6,7 @@ import './styles.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename='/familiarsworkshop'>
       <App />
     </BrowserRouter>
   </StrictMode>
