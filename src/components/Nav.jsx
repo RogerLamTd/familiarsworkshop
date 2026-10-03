@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { asset } from '../utils/assets';
 
 const links = [
   { to: '/', label: 'Home' },
