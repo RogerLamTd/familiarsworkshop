@@ -1,10 +1,10 @@
 /* Familiars Workshop — recreated from Canva design */
 /* Garabosse (SIL OFL) — optical sizes: Parangon (largest) … Perle (smallest) */
-@font-face{font-family:'Garabosse Parangon';src:url('/fonts/Garabosse-Parangon.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Gaillarde';src:url('/fonts/Garabosse-Gaillarde.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Mignonne';src:url('/fonts/Garabosse-Mignonne.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Nonpareille';src:url('/fonts/Garabosse-Nonpareille.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Perle';src:url('/fonts/Garabosse-Perle.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Parangon';src:url('/familiarsworkshop/fonts/Garabosse-Parangon.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Gaillarde';src:url('/familiarsworkshop/fonts/Garabosse-Gaillarde.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Mignonne';src:url('/familiarsworkshop/fonts/Garabosse-Mignonne.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Nonpareille';src:url('/familiarsworkshop/fonts/Garabosse-Nonpareille.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Perle';src:url('/familiarsworkshop/fonts/Garabosse-Perle.otf') format('opentype');font-display:swap}
 
 :root{
   --cream:#f8f4e3;
@@ -23,13 +23,13 @@
 }
 
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:70px;background:var(--cream)}
-/* Only the first three sections act as snap "pages"; everything below
-   (ready, note, footer) scrolls freely so the footer links stay reachable */
-.home>.hero,.home>.sec,.home>.bespoke{scroll-snap-align:start}
+html{scroll-behavior:smooth;scroll-snap-type:y proximity;scroll-padding-top:0;background:var(--cream)}
+/* each full section snaps to a page; proximity (not mandatory) so the note + footer
+   below the last section stay reachable instead of getting trapped */
+.home>.hero,.home>.sec,.home>.bespoke,.home>.note{scroll-snap-align:start}
 body{
-  margin:0 auto;
-  width:1440px;
+  margin:0;
+  width:100%;
   background:var(--cream);
   color:var(--ink);
   font-family:var(--body);
@@ -37,21 +37,35 @@ body{
   line-height:1.5;
   -webkit-font-smoothing:antialiased;
 }
+#root{position:relative}  /* containing block for the overlaid home nav */
 img{max-width:100%;display:block}
 a{color:inherit;text-decoration:none}
 .container{max-width:var(--maxw);margin:0 auto;padding:0 28px}
 
 /* ---------- nav ---------- */
-.nav{position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:1px solid rgba(0,0,0,.04)}
+/* not sticky: nav sits above the hero and scrolls away with it */
+.nav{position:relative;z-index:50;background:var(--cream);border-bottom:1px solid rgba(0,0,0,.04)}
+/* home: transparent nav laid over the hero so the photo runs up behind it */
+.nav--over{position:absolute;top:0;left:0;right:0;background:transparent;border-bottom:none}
 .nav-inner{max-width:var(--maxw);margin:0 auto;padding:16px 28px;display:flex;align-items:center;justify-content:space-between}
 .brand{display:flex;align-items:center;gap:10px;font-family:var(--caps);font-weight:900;color:var(--ink);letter-spacing:.02em}
 .brand .wordmark{font-size:15px;line-height:1;text-transform:uppercase}
 .brand .wordmark span{display:block}
 .brand-mark{width:34px;height:34px;color:var(--ink);flex:none}
-.nav-links{display:flex;gap:34px;font-family:var(--serif);font-size:19px}
+.nav-links{display:flex;align-items:center;gap:34px;font-family:var(--serif);font-size:19px}
 .nav-links a{color:var(--ink);opacity:.85;transition:opacity .2s}
 .nav-links a:hover,.nav-links a.active{opacity:1;color:var(--green)}
 .nav-toggle{display:none;background:none;border:0;font-size:26px;color:var(--ink);cursor:pointer}
+/* currency toggle: native select overlaid on the current-code label */
+.currency-toggle{position:relative;display:inline-flex;align-items:center;gap:5px;cursor:pointer;
+  font-family:var(--caps);font-size:13px;letter-spacing:.1em;color:var(--green);
+  border:1px solid rgba(38,74,48,.4);border-radius:999px;padding:8px 14px}
+.currency-toggle::after{content:"▾";font-size:11px;opacity:.7}
+.currency-toggle select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;
+  border:0;-webkit-appearance:none;appearance:none}
+.nav-cta{display:inline-flex;align-items:center;transition:opacity .2s}
+.nav-cta img{height:100px;width:auto;margin:-14px 0}
+.nav-cta:hover{opacity:.88}
 
 /* ---------- buttons ---------- */
 .btn{display:inline-block;background:var(--green);color:#fff;font-family:var(--caps);font-weight:600;
@@ -70,11 +84,90 @@ a{color:inherit;text-decoration:none}
 .logo{display:inline-block;width:1.05em;height:1.05em;vertical-align:-.15em;color:currentColor}
 
 /* ---------- home hero ---------- */
-.hero{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;padding:48px 0 70px;min-height:calc(100vh - 68px)}
-.hero-text h1{font-size:58px}
-.hero-photo-wrap{position:relative;min-height:460px;border-radius:2px;overflow:hidden}
-.hero-photo-wrap .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.hero-form h2{font-family:var(--caps);color:var(--green);font-weight:700;font-size:22px;letter-spacing:.04em;margin:6px 0 18px}
+/* full-screen: nav overlays the top, so the photo runs edge-to-edge incl. nav row */
+.hero{display:grid;grid-template-columns:1.5fr 1fr;height:100vh}
+/* left: photo bleeds full, copy vertically centered on top */
+.hero-art{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start}
+/* Head background.png is pre-cropped with the cream fade baked in */
+.hero-art .hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
+/* top offset controls how high the headline sits — raise/lower this one value */
+.hero-copy{position:relative;z-index:2;padding:17vh 52px 0}
+.hero-copy h1{font-size:52px;max-width:none}
+.hero-sub{font-family:var(--serif);color:var(--ink);font-size:20px;line-height:1.3;margin:16px 0 0;max-width:17em}
+.hero-stamp{position:absolute;z-index:2;left:36px;bottom:26px;width:78px;height:auto}
+/* right: parchment panel with inset gold-bordered, rounded form card */
+.hero-form{background:var(--cream2);display:flex;align-items:center;padding:20px}
+.hero-card{width:100%;border:1.5px solid var(--gold);border-radius:18px;padding:22px 26px;background:rgba(255,255,255,.14)}
+.hero-card h2{font-family:var(--serif);color:var(--ink);font-weight:600;font-size:25px;margin:0 0 14px}
+.hero-card .field{margin-bottom:10px}
+.hero-card .field label{margin-bottom:4px}
+.hero-card .field input,.hero-card .field textarea{padding:8px 12px;border-radius:9px}
+.hero-card .field textarea{min-height:60px}
+.field .upload{display:flex;align-items:center;gap:14px;border:1px dashed #b9b199;background:#fbf8ec;
+  border-radius:9px;padding:9px 13px;cursor:pointer;color:var(--ink);font-size:14px;line-height:1.3}
+.upload .plus{display:flex;align-items:center;justify-content:center;width:38px;height:38px;
+  border:1px solid #b9b199;border-radius:8px;font-size:22px;color:var(--ink);flex:none}
+.upload i{font-style:italic;color:#9c947f}  /* "Optional" lighter than the main label */
+/* placeholder text lighter than typed input, matching the mockup */
+.hero-card ::placeholder{color:#aaa290;opacity:1}
+.send-btn{display:block;width:100%;margin-top:8px;text-align:center;background:none;border:0;cursor:pointer;transition:opacity .2s}
+.send-btn:hover{opacity:.9}
+.send-btn img{display:inline-block;height:80px;width:auto}
+
+/* ---------- archive (grid portfolio) ---------- */
+.archive-page{padding:48px 0 90px}
+.arch-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.arch-head .serif-h{font-size:44px}
+.arch-head .sec-sub{margin-top:8px}
+.view-toggle{display:inline-flex;border:1px solid rgba(38,74,48,.4);border-radius:999px;overflow:hidden}
+.view-toggle button{background:none;border:0;cursor:pointer;font-family:var(--caps);font-size:13px;
+  letter-spacing:.1em;text-transform:uppercase;color:var(--green);padding:11px 22px;transition:background .2s,color .2s}
+.view-toggle button.active{background:var(--green);color:#fff}
+/* floating variant: icon switch pinned in the right gutter so it clears the grid */
+.view-toggle--float{position:fixed;top:50%;transform:translateY(-50%);z-index:40;
+  right:max(16px, calc(50vw - 690px));
+  flex-direction:column;align-items:stretch;border-radius:16px;background:var(--cream);
+  box-shadow:0 6px 24px rgba(0,0,0,.12)}
+.view-toggle--float button{display:flex;align-items:center;justify-content:center;padding:14px;color:var(--green)}
+.view-toggle--float button.active{background:var(--green);color:#fff}
+.view-toggle--float button+button{border-top:1px solid rgba(38,74,48,.2)}
+.view-icon{display:block;width:28px;height:28px;background-color:currentColor;
+  -webkit-mask:var(--icon) center/contain no-repeat;mask:var(--icon) center/contain no-repeat}
+.arch-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:28px 26px}
+.arch-card{background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.arch-img{aspect-ratio:4/5;border-radius:8px;overflow:hidden;background:var(--cream2)}
+.arch-img img{width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.arch-card:hover .arch-img img{transform:scale(1.04)}
+.arch-cap{display:flex;flex-direction:column;align-items:flex-start;gap:2px;margin-top:12px}
+.arch-cap .name{font-family:var(--serif);font-size:20px;color:var(--ink)}
+.arch-cap .price{font-family:var(--body);color:var(--muted);white-space:nowrap}
+/* detail popup */
+.arch-modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(25,30,22,.55);
+  display:flex;align-items:center;justify-content:center;padding:24px;animation:arch-fade .2s ease-out}
+.arch-modal{position:relative;background:var(--cream);border:1.5px solid var(--gold);border-radius:16px;
+  width:100%;max-width:540px;max-height:90vh;overflow:auto;padding:28px 40px;animation:arch-pop .25s ease-out}
+.arch-modal-x{position:absolute;top:12px;right:18px;background:none;border:0;font-size:30px;line-height:1;
+  color:var(--muted);cursor:pointer}
+.arch-modal-x:hover{color:var(--green)}
+/* popup gallery: main image + thumbnail strip */
+.arch-gallery{max-width:210px;margin:0 auto 16px}
+.arch-gallery-main{aspect-ratio:1;border-radius:12px;overflow:hidden;background:var(--cream2)}
+.arch-gallery-main img{width:100%;height:100%;object-fit:cover}
+.arch-gallery-thumbs{display:flex;gap:8px;justify-content:center;margin-top:8px}
+.arch-gallery-thumbs button{width:46px;height:46px;padding:0;border:2px solid transparent;border-radius:8px;
+  overflow:hidden;background:none;cursor:pointer}
+.arch-gallery-thumbs button.active{border-color:var(--gold)}
+.arch-gallery-thumbs img{width:100%;height:100%;object-fit:cover}
+.arch-modal h2{font-family:var(--serif);color:var(--green);font-size:30px;margin:0;text-align:center}
+.arch-breed{font-family:var(--serif);color:var(--green);font-size:16px;text-align:center;margin:2px 0 22px}
+.arch-specs{display:grid;grid-template-columns:auto 1fr;gap:6px 24px;margin:0 0 20px;font-size:16px}
+.arch-specs div{display:contents}
+.arch-specs dt{color:var(--ink);font-weight:600}
+.arch-specs dd{margin:0;color:#333}
+.arch-modal h3{font-family:var(--serif);color:var(--ink);font-size:18px;margin:16px 0 3px}
+.arch-modal p{font-size:16px;color:#333;margin:0;line-height:1.5}
+@keyframes arch-fade{from{opacity:0}to{opacity:1}}
+@keyframes arch-pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
 /* ---------- forms ---------- */
 .field{margin-bottom:16px}
@@ -86,7 +179,7 @@ a{color:inherit;text-decoration:none}
 .form-note{font-size:15px;color:var(--muted);margin:10px 0 14px}
 
 /* ---------- section headers ---------- */
-.sec{padding:56px 0;min-height:calc(100vh - 68px);display:flex;flex-direction:column;justify-content:center}
+.sec{padding:56px 0;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
 .sec-head .serif-h{font-size:42px}
 .sec-head .tag{font-family:var(--caps);color:var(--green);font-size:14px;letter-spacing:.14em}
@@ -110,18 +203,25 @@ a{color:inherit;text-decoration:none}
 .piece-cap .price{font-family:var(--body);color:var(--ink)}
 .archive-foot{text-align:center;color:var(--muted);font-size:16px;margin-top:6px}
 
-/* ---------- bespoke promise ---------- */
-.bespoke{position:relative;text-align:center;overflow:hidden;
-  min-height:420px;display:flex;align-items:center;justify-content:center;padding:28px 0}
-.bespoke .container{position:relative;z-index:2}  /* text above the decorative blossoms */
-/* branches sized to the compact section so they frame the text without crossing it */
-.bespoke .blossom{position:absolute;top:0;opacity:.95;pointer-events:none;height:auto}
-.bespoke .blossom.l{left:0;height:92%;width:auto}   /* tall narrow trunk down the left */
-.bespoke .blossom.r{right:0;height:80%;width:auto}  /* large branch, frames from the right */
-.bespoke .seal{width:46px;margin:0 auto 14px;color:var(--gold)}
+/* ---------- bespoke promise + commission process ---------- */
+.bespoke{position:relative;text-align:center;overflow:hidden;padding:80px 0 90px;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.bespoke .container{position:relative;z-index:2}  /* text above the decorative blossom */
+/* peach blossom branch reaching in from the top-right */
+.bespoke .blossom{position:absolute;top:0;opacity:.7;pointer-events:none;z-index:1}
+.bespoke .blossom.r{right:0;top:0;width:40%;height:auto}
+.bespoke .hero-stamp{position:static;width:46px;margin:0 auto 14px}
 .bespoke .promise-label{font-family:var(--serif);color:var(--ink);font-size:18px;letter-spacing:.02em}
 .bespoke .promise-label b{color:var(--green);font-weight:700;letter-spacing:.12em}
-.bespoke .promise{position:relative;z-index:2;font-family:var(--serif);color:var(--green);font-size:32px;max-width:640px;margin:16px auto 0;line-height:1.35}
+.bespoke .promise{font-family:var(--serif);color:var(--green);font-size:22px;max-width:640px;margin:16px auto 0;line-height:1.35}
+/* 4-part process row */
+.commission{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr);
+  gap:30px;margin:56px 0 0;text-align:center}
+.cstep{display:flex;flex-direction:column;align-items:center}
+.cnum{font-family:var(--caps);color:var(--ink);font-weight:700;font-size:24px;letter-spacing:.12em;margin-bottom:12px}
+.cimg{height:140px;width:auto;object-fit:contain;margin-bottom:20px}
+.commission h4{font-family:var(--serif);color:var(--green);font-size:24px;font-weight:600;margin:0 0 10px}
+.commission p{font-size:15px;color:var(--muted);line-height:1.45;max-width:17em;margin:0 auto}
 
 /* ---------- ready to begin ---------- */
 .ready{display:grid;grid-template-columns:.7fr 1.3fr;gap:40px;align-items:center;padding:20px 0 70px}
@@ -200,13 +300,15 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- contact ---------- */
 .contact-hero{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch}
-.contact-hero .art{position:relative;min-height:560px;overflow:hidden}
-.contact-hero .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.contact-hero .art{position:relative;height: 100vh;max-height: 720px;overflow:hidden}
+.contact-hero .art > img:not(.contact-stamp){position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.contact-hero .art .contact-stamp {width: 78px;height: auto;}
 .contact-hero .art h1{position:absolute;z-index:2;top:30px;left:30px;right:30px;font-size:54px}
 .contact-hero .panel{padding:60px 44px;display:flex;flex-direction:column;justify-content:center}
 .contact-hero .panel .serif-h{font-size:34px;text-align:center}
 .contact-hero .panel .form-note{text-align:center}
 .contact-hero form{width:100%;max-width:520px;margin:6px auto 0}
+.contact-stamp{position:absolute;z-index:2;left:36px;bottom:26px;width:78px;height:auto}
 
 /* ---------- faq ---------- */
 .faq{padding:50px 0;max-width:900px;margin:0 auto}
@@ -259,7 +361,11 @@ a{color:inherit;text-decoration:none}
 .marquee .piece,.archive-static .piece{cursor:pointer;transition:transform .2s}
 .marquee .piece:hover,.archive-static .piece:hover{transform:translateY(-5px)}
 /* filtered view: static, centered, no scrolling */
-.archive-static{display:flex;justify-content:center;flex-wrap:wrap;gap:34px;padding:34px 0 14px}
+/* filtered that fits: single centered row, no scrollbar (overflow -> JS swaps in marquee) */
+.archive-static{display:flex;justify-content:center;flex-wrap:nowrap;gap:34px;padding:34px 0 14px}
+.archive-wrap{position:relative}
+/* hidden single-row measurer used to decide static vs auto-scroll */
+.archive-measure{position:absolute;visibility:hidden;height:0;overflow:hidden;display:flex;gap:34px;white-space:nowrap}
 .marquee:hover .marquee-track{animation-play-state:paused}
 @keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){

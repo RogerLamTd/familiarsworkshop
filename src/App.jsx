@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <>
-      <Nav />
+      <Nav over={pathname === '/'} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/story" element={<Story />} />

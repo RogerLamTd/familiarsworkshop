@@ -1,5 +1,4 @@
-
-import MailtoForm from '../components/MailtoForm.jsx';
+import EnquiryForm from '../components/EnquiryForm.jsx';
 import { asset } from '../utils/assets';
 
 export default function Contact() {
@@ -7,22 +6,13 @@ export default function Contact() {
     <main>
       <section className="contact-hero">
         <div className="art">
-          <img src={asset("/img/contact-hero.webp")} alt="A deer beneath blossoming trees" />
+          <img src={asset("/img/contact/contact-hero.webp")} alt="A deer beneath blossoming trees" />
           <h1 className="display">Get in touch with our craftspeople</h1>
+          <img className="contact-stamp" src={asset("/img/logos/stamp.png")} alt="" />
         </div>
+        
         <div className="panel">
-          <h2 className="serif-h">TELL US ABOUT YOUR FAMILIAR</h2>
-          <MailtoForm
-            to="business@familiarsworkshop.com"
-            subject="Contact — Familiars Workshop"
-            fields={[
-              { name: 'Name', label: 'Name', required: true },
-              { name: 'Email', label: 'Email', type: 'email', required: true },
-              { name: 'Instagram', label: 'Instagram handle', placeholder: 'Optional' },
-              { name: 'Phone', label: 'Phone Number' },
-              { name: 'Comment', label: 'Comment', type: 'textarea' },
-            ]}
-          />
+          <EnquiryForm mode="send" />
         </div>
       </section>
     </main>

@@ -11,9 +11,11 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^6.26.2"
+    "@tanstack/react-query": "^5.105.0",
+    "react": "^19.3.1",
+    "react-currency-localizer": "^2.1.0",
+    "react-dom": "^19.3.1",
+    "react-router-dom": "^6.30.6"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.1",

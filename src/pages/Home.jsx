@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { asset } from '../utils/assets';
+import { useFormatPrice } from '../utils/currency.jsx';
+import EnquiryForm from '../components/EnquiryForm.jsx';
 
 // Each frame keeps its NATURAL aspect ratio (pieces end up different widths at a
 // shared height -> size variety in the marquee). `win` = [left,top,width,height] %
@@ -8,22 +10,25 @@ import { asset } from '../utils/assets';
 // mode 'window' = photo sits behind, shows through the cut-out; 'backdrop' = art
 // behind, photo laid on top. `round` crops the photo to a circle.
 const FRAMES = {
-  floral: { img: 'frame-floral.webp', ratio: 0.667, mode: 'window', win: [16.9, 11.5, 65.8, 77.0] },
-  ukiyoe: { img: 'frame-ukiyoe.webp', ratio: 0.709, mode: 'backdrop', win: [8, 7, 84, 87] },
-  maze: { img: 'frame-maze.webp', ratio: 1.0, mode: 'window', win: [17.8, 29.4, 64.4, 41.0] },
-  ring: { img: 'leadingman-plate.webp', ratio: 0.964, mode: 'window', win: [21.1, 20.2, 58.3, 56.4], round: true },
+  // win = inner opening measured from each PNG's alpha; rectangles are inset ~3% more
+  // than the opening so a little border shows between photo and frame (like the circle)
+  vertical: { img: 'home/marquee/vertical.png', ratio: 0.75, mode: 'window', win: [16.4, 9.0, 67.2, 82.0] },
+  circle: { img: 'home/marquee/circle.png', ratio: 1.0, mode: 'window', win: [8.7, 9.0, 82.4, 80.4], round: true },
+  horizontal: { img: 'home/marquee/horizontal frame.png', ratio: 1.333, mode: 'window', win: [9.0, 16.4, 82.0, 67.2] },
+  square: { img: 'home/marquee/square.png', ratio: 1.0, mode: 'window', win: [14.1, 13.7, 71.7, 72.2] },
 };
 
-// `link` = portfolio section anchor for that animal (see ids in Portfolio.jsx)
+// `familiar` = id of the matching Portfolio familiar (opens its popup on click)
+// price = base amount in HKD (converted/formatted by the active currency)
 const archive = [
-  { name: 'The Professional Critic', price: '$9,000', material: 'gold',
-    frame: 'floral', photo: 'critic-photo.webp', alt: 'Gold Pekingese pendant', link: '#cotton-gold' },
-  { name: 'The Leading Man', material: 'silver',
-    frame: 'ring', photo: 'leadingman-photo.webp', alt: 'Silver earrings', link: '#schnauzer' },
-  { name: 'The Usual Suspect', material: 'silver',
-    frame: 'ukiyoe', photo: 'suspect-photo.webp', alt: 'Silver corgi pendant', link: '#gaygay' },
-  { name: 'The Understudy', material: 'silver',
-    frame: 'maze', photo: 'fourth-photo.webp', alt: 'Silver dog pendant', link: '#cotton-silver' },
+  { name: 'The Professional Critic', price: 4980, material: 'gold',
+    frame: 'vertical', photo: 'home/marquee/critic-photo.webp', alt: 'Gold Pekingese pendant', familiar: 'grumpy-cotton' },
+  { name: 'The Leading Man', price: 2840, material: 'silver',
+    frame: 'circle', photo: 'home/marquee/leadingman-photo.webp', alt: 'Silver earrings', familiar: 'bleu' },
+  { name: 'The Usual Suspect', price: 2790, material: 'silver',
+    frame: 'horizontal', photo: 'home/marquee/suspect-photo.webp', alt: 'Silver corgi pendant', familiar: 'gaygay' },
+  { name: 'The Understudy', price: 2755, material: 'silver',
+    frame: 'square', photo: 'home/marquee/fourth-photo.webp', alt: 'Silver dog pendant', familiar: 'cotton' },
 ];
 
 const filters = [
@@ -32,24 +37,77 @@ const filters = [
   { key: 'gold', label: 'Gold' },
 ];
 
+// the 4-part commission process (illustrations in img/instruction)
+const steps = [
+  { n: '01', img: 'step1.png', title: 'The Introduction',
+    text: "Share your pet's photos and the piece you have in mind." },
+  { n: '02', img: 'step2.png', title: 'The Commission',
+    text: 'We review your enquiry and return with our recommendations, material options, and an estimated quote.' },
+  { n: '03', img: 'step3.png', title: 'The Portrait',
+    text: 'A kick-off fee begins the sculpting process. Your talisman is designed for your approval.' },
+  { n: '04', img: 'step4.png', title: 'The Making',
+    text: 'Once approved, the portrait is cast in precious metal and finds its way to you.' },
+];
+
 function Piece({ p }) {
   const f = FRAMES[p.frame];
+  const fmt = useFormatPrice();
   const [l, t, w, h] = f.win;
   const photoStyle = {
     left: `${l}%`, top: `${t}%`, width: `${w}%`, height: `${h}%`,
     borderRadius: f.round ? '50%' : 0,
   };
   return (
-    <Link className="piece" to={`/portfolio${p.link}`}>
+    <Link className="piece" to={`/portfolio?familiar=${p.familiar}`}>
       <div className={`piece-frame ${f.mode}`} style={{ aspectRatio: f.ratio }}>
         <img className="photo" style={photoStyle} src={asset(`/img/${p.photo}`)} alt={p.alt} />
         <img className="frame" src={asset(`/img/${f.img}`)} alt="" />
       </div>
       <div className="piece-cap">
         <div className="name">{p.name}</div>
-        {p.price && <div className="price">{p.price}</div>}
+        {p.price && <div className="price">{fmt(p.price)}</div>}
       </div>
     </Link>
+  );
+}
+
+// One row of pieces. If they fit, show them static & centered; if they overflow,
+// switch to the seamless auto-scroll marquee (no scrollbar). Piece widths come from
+// CSS aspect-ratio, so the hidden measurer is accurate before images load.
+function ArchiveRow({ items }) {
+  const measureRef = useRef(null);
+  const [overflow, setOverflow] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      const el = measureRef.current;
+      if (el) setOverflow(el.scrollWidth > el.parentElement.clientWidth + 1);
+    };
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, [items]);
+
+  return (
+    <div className="archive-wrap">
+      <div className="archive-measure" ref={measureRef} aria-hidden>
+        {items.map((p, i) => <Piece key={i} p={p} />)}
+      </div>
+      {overflow ? (
+        <div className="marquee">
+          <div className="marquee-track">
+            {(() => {
+              const base = [];
+              while (base.length < 6) base.push(...items);
+              return [...base, ...base].map((p, i) => <Piece key={i} p={p} />);
+            })()}
+          </div>
+        </div>
+      ) : (
+        <div className="archive-static">
+          {items.map((p, i) => <Piece key={i} p={p} />)}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -60,13 +118,18 @@ export default function Home() {
   return (
     <main className="home">
       {/* HERO */}
-      <section className="container hero">
-        <div className="hero-text">
-          <h1 className="display">Every talisman begins with a face you know by heart.</h1>
+      <section className="hero">
+        <div className="hero-art">
+          <img className="hero-photo" src={asset("/img/home/enquiry/headbackground.png")} alt="A woman with her dog and puppies" />
+          <div className="hero-copy">
+            <h1 className="display">Every talisman<br />begins with a face<br />you know by heart.</h1>
+            <p className="hero-sub">Turn your beloved companion into a one-of-a-kind, handcrafted piece.</p>
+          </div>
+          <img className="hero-stamp" src={asset("/img/logos/stamp.png")} alt="" />
         </div>
-        <div className="hero-photo-wrap">
-          <img className="hero-photo" src={asset("/img/home-hero.webp")} alt="Children with their dog" />
-        </div>
+        <aside className="hero-form">
+          <EnquiryForm mode="link" />
+        </aside>
       </section>
 
       {/* ARCHIVE */}
@@ -87,54 +150,33 @@ export default function Home() {
           </div>
         </div>
 
-        {filter === 'all' ? (
-          <div className="marquee">
-            {/* pad to >=6, then duplicate the base for a seamless slow
-                auto-scroll (pauses on hover) */}
-            <div className="marquee-track">
-              {(() => {
-                const base = [];
-                while (base.length < 6) base.push(...shown);
-                return [...base, ...base].map((p, i) => <Piece key={i} p={p} />);
-              })()}
-            </div>
-          </div>
-        ) : (
-          /* filtered: static, centered, each shown once */
-          <div className="archive-static">
-            {shown.map((p, i) => <Piece key={i} p={p} />)}
-          </div>
-        )}
+        <ArchiveRow items={shown} />
         <p className="archive-foot">Browse past portraits, materials, sizes and quoted prices.</p>
       </section>
 
-      {/* BESPOKE PROMISE */}
+      {/* BESPOKE PROMISE + COMMISSION PROCESS */}
       <section className="bespoke">
-        <img className="blossom l" src={asset("/img/blossom-left.webp")} alt="" />
-        <img className="blossom r" src={asset("/img/blossom-right.webp")} alt="" />
+        <img className="blossom r" src={asset("/img/home/instruction/peach blossom.png")} alt="" />
         <div className="container">
-          <svg className="seal" viewBox="0 0 40 40" aria-hidden="true"><rect x="2" y="2" width="36" height="36" rx="4" fill="none" stroke="currentColor" strokeWidth="2.5" /><path d="M11 11h18v18H11z M11 20h18 M20 11v18" fill="none" stroke="currentColor" strokeWidth="2.5" /></svg>
+          <img className="hero-stamp" src={asset("/img/logos/stamp.png")} alt="" />
           <p className="promise-label">our <b>Bespoke</b> promise to you</p>
-          <p className="promise">To make something that could only belong to you &mdash; and only look like them</p>
-        </div>
-      </section>
-
-      {/* READY TO BEGIN */}
-      <section className="container ready">
-        <img className="oval" src={asset("/img/oval-necklace.webp")} alt="Familiar pendant on a chain" />
-        <div>
-          <h2>Ready to <b>Begin?</b></h2>
-          <p>Every Familiar talisman begins with an enquiry.<br />
-            Once received, we begin studying their photos, expression and details;
-            then, upon receiving the <b>design fee</b>, we develop the first portrait for your review.</p>
-          <p>The final piece is quoted separately according to material, size and complexity.</p>
-          <Link className="btn" to="/contact">Contact Us</Link>
+          <p className="promise">To make something that could only belong to you &mdash;<br/> and only look like them</p>
+          <ol className="commission">
+            {steps.map((s) => (
+              <li className="cstep" key={s.n}>
+                <div className="cnum">{s.n}</div>
+                <img className="cimg" src={asset(`/img/home/instruction/${s.img}`)} alt="" />
+                <h4>{s.title}</h4>
+                <p>{s.text}</p>
+              </li>
+            ))}
+          </ol>
         </div>
       </section>
 
       {/* NOTE FROM THE WORKSHOP */}
       <section className="note">
-        <img src={asset("/img/home-story.webp")} alt="" />
+        <img src={asset("/img/story/home-story.png")} alt="" />
         <div className="inner">
           <span className="eyebrow">A note from the workshop</span>
           <p>We believe that the animals beside us are more than companions.</p>
