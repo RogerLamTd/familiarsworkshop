@@ -368,7 +368,3 @@ a{color:inherit;text-decoration:none}
 .archive-measure{position:absolute;visibility:hidden;height:0;overflow:hidden;display:flex;gap:34px;white-space:nowrap}
 .marquee:hover .marquee-track{animation-play-state:paused}
 @keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-@media(prefers-reduced-motion:reduce){
-  .marquee{overflow-x:auto}
-  .marquee-track{animation:none}
-}
