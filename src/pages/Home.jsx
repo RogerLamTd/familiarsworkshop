@@ -128,7 +128,7 @@ export default function Home() {
           <img className="hero-stamp" src={asset("/img/logos/stamp.png")} alt="" />
         </div>
         <aside className="hero-form">
-          <EnquiryForm mode="link" />
+          <EnquiryForm />
         </aside>
       </section>
 

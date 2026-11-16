@@ -95,21 +95,73 @@ a{color:inherit;text-decoration:none}
 .hero-copy h1{font-size:52px;max-width:none}
 .hero-sub{font-family:var(--serif);color:var(--ink);font-size:20px;line-height:1.3;margin:16px 0 0;max-width:17em}
 .hero-stamp{position:absolute;z-index:2;left:36px;bottom:26px;width:78px;height:auto}
+/* CSS version of the cream fade baked into the home image (used on Contact) */
+.hero-art--fade::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(248,244,227,.82) 0%,rgba(248,244,227,.45) 40%,rgba(248,244,227,.2) 100%)}
 /* right: parchment panel with inset gold-bordered, rounded form card */
-.hero-form{background:var(--cream2);display:flex;align-items:center;padding:20px}
+.hero-form{background:var(--cream2);display:flex;align-items:center;padding:104px 20px 16px}  /* top pad clears the overlaid nav */
 .hero-card{width:100%;border:1.5px solid var(--gold);border-radius:18px;padding:22px 26px;background:rgba(255,255,255,.14)}
 .hero-card h2{font-family:var(--serif);color:var(--ink);font-weight:600;font-size:25px;margin:0 0 14px}
 .hero-card .field{margin-bottom:10px}
-.hero-card .field label{margin-bottom:4px}
-.hero-card .field input,.hero-card .field textarea{padding:8px 12px;border-radius:9px}
+.hero-card .field label,.hero-card .field-label{margin-bottom:4px}
+.field-label i{font-size:14px;color:#9c947f}
+.hero-card .field input,.hero-card .field select,.hero-card .field textarea{padding:8px 12px;border-radius:9px}
 .hero-card .field textarea{min-height:60px}
-.field .upload{display:flex;align-items:center;gap:14px;border:1px dashed #b9b199;background:#fbf8ec;
-  border-radius:9px;padding:9px 13px;cursor:pointer;color:var(--ink);font-size:14px;line-height:1.3}
-.upload .plus{display:flex;align-items:center;justify-content:center;width:38px;height:38px;
-  border:1px solid #b9b199;border-radius:8px;font-size:22px;color:var(--ink);flex:none}
-.upload i{font-style:italic;color:#9c947f}  /* "Optional" lighter than the main label */
+/* reference photos: one large main slot over a 3-up auxiliary grid */
+.field .refs{display:grid;grid-template-columns:repeat(3,1fr);border:1px dashed #b9b199;border-radius:9px;
+  overflow:hidden;background:#fbf8ec}
+.field .refs label{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:4px;margin:0;min-height:60px;cursor:pointer;color:var(--ink);font-size:14px;line-height:1.3;text-align:center;
+  border-top:1px dashed #b9b199}
+.field .refs label + label + label{border-left:1px dashed #b9b199}
+.field .refs .ref-main{grid-column:1/-1;min-height:110px;border:0}
+.field .refs label:focus-within{outline:2px solid var(--green);outline-offset:-2px}
+.field .refs input{position:absolute;inset:0;width:1px;height:1px;padding:0;opacity:0}
+.field .refs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.refs .plus{font-size:22px;line-height:1}
+.field .refs img.slot-icon{position:static;width:auto;height:30px;object-fit:contain}
+.field .refs .ref-main img.slot-icon{height:44px}
+.refs .count{position:absolute;z-index:1;right:5px;bottom:5px;padding:1px 7px;border-radius:9px;background:rgba(0,0,0,.6);color:#fff;font-size:12px}
+/* "Others" photo manager */
+.photo-dialog{width:min(520px,92vw);border:1.5px solid var(--gold);border-radius:14px;padding:18px 20px;background:var(--cream);color:var(--ink)}
+.photo-dialog::backdrop{background:rgba(0,0,0,.45)}
+.photo-dialog h3{font-family:var(--serif);font-size:20px;margin:0 0 12px}
+.photo-dialog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+.photo-dialog .thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid #b9b199;background:#fbf8ec}
+.photo-dialog .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo-dialog .thumb button{position:absolute;top:4px;right:4px;width:24px;height:24px;border:0;border-radius:50%;
+  background:rgba(0,0,0,.6);color:#fff;font-size:16px;line-height:1;cursor:pointer}
+.photo-dialog .thumb.add{border-style:dashed;font-family:var(--body);font-size:15px;color:var(--ink);cursor:pointer}
+.photo-dialog-done{display:block;margin:14px 0 0 auto;padding:7px 20px;border:1px solid var(--green);border-radius:18px;
+  background:var(--green);color:#fff;font-family:var(--body);font-size:15px;cursor:pointer}
+.refs i{font-style:italic;color:#9c947f;font-size:12px}
 /* placeholder text lighter than typed input, matching the mockup */
 .hero-card ::placeholder{color:#aaa290;opacity:1}
+/* compact card (home + contact) so the whole form fits in the first view */
+.hero-card{padding:14px 22px}
+.hero-card h2{font-size:22px;margin-bottom:8px}
+.hero-card .field{margin-bottom:7px}
+.hero-card .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hero-card .field label b{color:#a5432f;font-weight:400}  /* required marker */
+.hero-card .field label,.hero-card .field-label{font-size:15px;margin-bottom:3px}
+.hero-card .field input,.hero-card .field select,.hero-card .field textarea{font-size:15px;padding:6px 11px}
+.hero-card .field textarea{min-height:44px}
+.hero-card .refs label{min-height:46px;font-size:13px}
+.hero-card .refs .ref-main{min-height:76px}
+.hero-card .send-btn{margin-top:4px}
+.hero-card .send-btn img{height:66px}
+@media (max-height:800px){  /* short laptop screens */
+  .hero-form{padding-top:104px;padding-bottom:8px}
+  .hero-card h2{font-size:20px;margin-bottom:4px}
+  .hero-card .field{margin-bottom:4px}
+  .hero-card .field textarea{min-height:36px}
+  .hero-card .refs .ref-main{min-height:56px}
+  .hero-card .refs label{min-height:38px}
+  .hero-card .refs i{display:none}
+  .field .refs img.slot-icon{height:24px}
+  .field .refs .ref-main img.slot-icon{height:34px}
+  .hero-card .send-btn img{height:54px}
+}
 .send-btn{display:block;width:100%;margin-top:8px;text-align:center;background:none;border:0;cursor:pointer;transition:opacity .2s}
 .send-btn:hover{opacity:.9}
 .send-btn img{display:inline-block;height:80px;width:auto}
@@ -171,11 +223,11 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- forms ---------- */
 .field{margin-bottom:16px}
-.field label{display:block;font-family:var(--body);font-size:17px;color:var(--ink);margin-bottom:6px}
-.field input,.field textarea{width:100%;font-family:var(--body);font-size:17px;padding:11px 13px;
+.field label,.field-label{display:block;font-family:var(--body);font-size:17px;color:var(--ink);margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;font-family:var(--body);font-size:17px;padding:11px 13px;
   border:1px solid #b9b199;background:#fbf8ec;color:var(--ink);border-radius:2px}
-.field textarea{min-height:110px;resize:vertical}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--green)}
+.field textarea{min-height:110px;resize:none}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green)}
 .form-note{font-size:15px;color:var(--muted);margin:10px 0 14px}
 
 /* ---------- section headers ---------- */
@@ -298,17 +350,6 @@ a{color:inherit;text-decoration:none}
 .steps .step h4{font-family:var(--serif);color:var(--ink);font-weight:1000;font-size:19px;margin:14px 0 8px}
 .steps .step p{font-size:15px;color:var(--muted);line-height:1.4}
 
-/* ---------- contact ---------- */
-.contact-hero{display:grid;grid-template-columns:1fr 1fr;gap:0;align-items:stretch}
-.contact-hero .art{position:relative;height: 100vh;max-height: 720px;overflow:hidden}
-.contact-hero .art > img:not(.contact-stamp){position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.contact-hero .art .contact-stamp {width: 78px;height: auto;}
-.contact-hero .art h1{position:absolute;z-index:2;top:30px;left:30px;right:30px;font-size:54px}
-.contact-hero .panel{padding:60px 44px;display:flex;flex-direction:column;justify-content:center}
-.contact-hero .panel .serif-h{font-size:34px;text-align:center}
-.contact-hero .panel .form-note{text-align:center}
-.contact-hero form{width:100%;max-width:520px;margin:6px auto 0}
-.contact-stamp{position:absolute;z-index:2;left:36px;bottom:26px;width:78px;height:auto}
 
 /* ---------- faq ---------- */
 .faq{padding:50px 0;max-width:900px;margin:0 auto}

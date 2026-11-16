@@ -38,7 +38,7 @@ export default function App() {
 
   return (
     <>
-      <Nav over={pathname === '/'} />
+      <Nav over={pathname === '/' || pathname === '/contact'} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/story" element={<Story />} />
