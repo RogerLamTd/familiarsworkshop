@@ -1,10 +1,10 @@
 /* Familiars Workshop — recreated from Canva design */
 /* Garabosse (SIL OFL) — optical sizes: Parangon (largest) … Perle (smallest) */
-@font-face{font-family:'Garabosse Parangon';src:url('/familiarsworkshop/fonts/Garabosse-Parangon.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Gaillarde';src:url('/familiarsworkshop/fonts/Garabosse-Gaillarde.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Mignonne';src:url('/familiarsworkshop/fonts/Garabosse-Mignonne.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Nonpareille';src:url('/familiarsworkshop/fonts/Garabosse-Nonpareille.otf') format('opentype');font-display:swap}
-@font-face{font-family:'Garabosse Perle';src:url('/familiarsworkshop/fonts/Garabosse-Perle.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Parangon';src:url('/fonts/Garabosse-Parangon.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Gaillarde';src:url('/fonts/Garabosse-Gaillarde.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Mignonne';src:url('/fonts/Garabosse-Mignonne.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Nonpareille';src:url('/fonts/Garabosse-Nonpareille.otf') format('opentype');font-display:swap}
+@font-face{font-family:'Garabosse Perle';src:url('/fonts/Garabosse-Perle.otf') format('opentype');font-display:swap}
 
 :root{
   --cream:#f8f4e3;
