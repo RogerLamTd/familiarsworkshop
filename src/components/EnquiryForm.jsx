@@ -1,8 +1,6 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { asset } from '../utils/assets';
 
-// TEMP: local dev sends to a test inbox; production build still uses business@. Remove before merging.
-const TO = import.meta.env.DEV ? 'you@example.com' : 'business@familiarsworkshop.com';
 const SEND_BTN = '/img/home/enquiry/sendenquirybutton.png';
 const MATERIALS = {
   'Silver': ['S925'],
@@ -83,34 +81,36 @@ function PhotoSlot({ name, label, icon, hint, className, multiple }) {
 }
 
 // The gold-bordered enquiry card from the home hero, shared so the Contact page
-// mirrors it exactly. Submitting opens a mailto with the entered details.
+// mirrors it exactly. Submitting posts to the Worker at /api/enquiry (worker/index.js).
 export default function EnquiryForm() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState('idle'); // 'idle' | 'sending' | 'sent' | error message
+  const ts = useRef(null);
+  const widget = useRef(null);
 
-  const onSubmit = (e) => {
+  useEffect(() => {
+    widget.current = window.turnstile?.render(ts.current, {
+      sitekey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
+      appearance: 'interaction-only', // hidden unless Cloudflare wants a click, so the layout holds
+    });
+    return () => widget.current && window.turnstile.remove(widget.current);
+  }, []);
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    const d = new FormData(e.currentTarget);
-    // ponytail: mailto can't carry files, so we only note how many photos were picked
-    const photos = [...d.values()].filter((v) => v instanceof File && v.size).length;
-    const body = ['Name', 'Email', 'Phone', 'Instagram', 'Material', 'Familiar', 'Code']
-      .map((k) => [k, (d.get(k) || '').toString().trim()])
-      .filter(([, v]) => v)
-      .map(([k, v]) => `${k}: ${v}`)
-      .concat(photos ? [`\nPhotos: ${photos} selected. Please attach them to this email.`] : [])
-      .join('\n');
-    window.location.href =
-      `mailto:${TO}?subject=${encodeURIComponent('Enquiry — Familiars Workshop')}` +
-      `&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    setStatus('sending');
+    // FormData carries every photo input plus Turnstile's hidden token
+    const res = await fetch('/api/enquiry', { method: 'POST', body: new FormData(e.currentTarget) }).catch(() => null);
+    if (res?.ok) return setStatus('sent');
+    setStatus((await res?.json().catch(() => null))?.error || 'Something went wrong, please try again.');
+    window.turnstile?.reset(widget.current); // tokens are single-use
   };
 
-  if (sent) {
+  if (status === 'sent') {
     return (
       <div className="hero-card">
         <h2>A few details to get started.</h2>
         <p className="form-sent" role="status">
-          Thank you — your email app should have opened with your enquiry.
-          If it didn't, write to us at {TO}.
+          Thank you — your enquiry is on its way. We'll be in touch soon.
         </p>
       </div>
     );
@@ -170,7 +170,9 @@ export default function EnquiryForm() {
           <label htmlFor="ef-code">Code</label>
           <input id="ef-code" name="Code" placeholder="Discount code (optional)" />
         </div>
-        <button type="submit" className="send-btn">
+        <div ref={ts} />
+        {status !== 'idle' && status !== 'sending' && <p className="form-error" role="alert">{status}</p>}
+        <button type="submit" className="send-btn" disabled={status === 'sending'}>
           <img src={asset(SEND_BTN)} alt="Send an enquiry" />
         </button>
       </form>

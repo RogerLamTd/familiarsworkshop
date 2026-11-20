@@ -5,8 +5,11 @@
   "observability": {
     "enabled": true
   },
-  "vars": {},
+  "main": "worker/index.js",
+  // override locally in .env (ENQUIRY_TO=you@gmail.com) to test without emailing the business
+  "vars": { "ENQUIRY_TO": "business@familiarsworkshop.com" },
   "assets": {
-    "not_found_handling": "single-page-application"
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
   },
 }

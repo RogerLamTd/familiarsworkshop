@@ -164,6 +164,8 @@ a{color:inherit;text-decoration:none}
 }
 .send-btn{display:block;width:100%;margin-top:8px;text-align:center;background:none;border:0;cursor:pointer;transition:opacity .2s}
 .send-btn:hover{opacity:.9}
+.send-btn:disabled{opacity:.5;cursor:wait}
+.form-error{color:#a5432f;font-size:14px;margin:6px 0 0}
 .send-btn img{display:inline-block;height:80px;width:auto}
 
 /* ---------- archive (grid portfolio) ---------- */
