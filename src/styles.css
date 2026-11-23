@@ -375,6 +375,56 @@ a{color:inherit;text-decoration:none}
 .footer .contact-txt{color:var(--muted)}
 
 /* ---------- responsive ---------- */
+/* phones: one column everywhere, hamburger nav, smaller type */
+@media (max-width:760px){
+  html{scroll-snap-type:none}
+  body{font-size:17px}
+  .container{padding:0 18px}
+  .nav-inner{position:relative;padding:12px 18px}
+  .nav-toggle{display:block}
+  .nav-links{display:none;position:absolute;top:100%;left:0;right:0;flex-direction:column;gap:14px;
+    padding:14px 18px 20px;background:var(--cream);box-shadow:0 10px 20px rgba(0,0,0,.08)}
+  .nav-links.open{display:flex}
+  .nav-cta img{height:72px;margin:-8px 0}
+  /* hero: photo + headline, then the form below */
+  .hero{grid-template-columns:1fr;height:auto}
+  .hero-art{min-height:80svh}
+  .hero-copy{padding:110px 20px 0}
+  .hero-copy h1{font-size:34px}
+  .hero-sub{font-size:18px}
+  .hero-form{padding:24px 12px 32px}
+  .hero-card .field-row{grid-template-columns:1fr;gap:0}
+  .hero-card .field input,.hero-card .field select,.hero-card .field textarea{font-size:16px}  /* <16px makes iOS zoom on focus */
+  .sec,.bespoke{min-height:0;padding:48px 0}
+  .sec-head .serif-h,.arch-head .serif-h{font-size:32px}
+  .commission{grid-template-columns:1fr 1fr;gap:28px 14px;margin-top:36px}
+  .cimg{height:100px}
+  .commission h4{font-size:20px}
+  .ready{grid-template-columns:1fr;text-align:center;gap:20px}
+  .ready h2{font-size:32px}
+  .piece-frame{height:240px}
+  .archive-static{justify-content:flex-start;overflow-x:auto}
+  .note .inner{padding:70px 18px}
+  .note p{font-size:20px}
+  .story-hero .hero-dog{width:150px}
+  .story-hero .cap{padding:18px}
+  .story-hero .cap b{font-size:22px}
+  .story-hero .cap span{font-size:18px}
+  .story-grid{grid-template-columns:1fr}
+  .story-card{min-height:440px}
+  .story-card .top{padding:24px}
+  .story-card .top .big{font-size:22px}
+  .story-card .bot{right:20px;bottom:20px;font-size:18px}
+  .case,.arch-grid{grid-template-columns:1fr 1fr}
+  .case .info{grid-column:1/-1}
+  .arch-modal{padding:24px 20px}
+  .view-toggle--float{top:auto;bottom:16px;right:16px;transform:none;flex-direction:row}
+  .view-toggle--float button+button{border-top:0;border-left:1px solid rgba(38,74,48,.2)}
+  .faq h1{font-size:34px}
+  .footer-inner{grid-template-columns:1fr 1fr;padding:0 18px}
+  .footer .contact-txt{overflow-wrap:anywhere}
+  .steps{grid-template-columns:1fr 1fr}
+}
 /* ---------- interactive additions (React) ---------- */
 .archive-filter{display:flex;gap:8px}
 .filter-btn{font-family:var(--caps);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
