@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { asset } from '../utils/assets';
 import { useFormatPrice } from '../utils/currency.jsx';
 import EnquiryForm from '../components/EnquiryForm.jsx';
+import { familiars } from '../data/familiars.js';
 
 // Each frame keeps its NATURAL aspect ratio (pieces end up different widths at a
 // shared height -> size variety in the marquee). `win` = [left,top,width,height] %
@@ -12,24 +13,27 @@ import EnquiryForm from '../components/EnquiryForm.jsx';
 const FRAMES = {
   // win = inner opening measured from each PNG's alpha; rectangles are inset ~3% more
   // than the opening so a little border shows between photo and frame (like the circle)
-  vertical: { img: 'home/marquee/vertical.png', ratio: 0.75, mode: 'window', win: [16.4, 9.0, 67.2, 82.0] },
-  circle: { img: 'home/marquee/circle.png', ratio: 1.0, mode: 'window', win: [8.7, 9.0, 82.4, 80.4], round: true },
-  horizontal: { img: 'home/marquee/horizontal frame.png', ratio: 1.333, mode: 'window', win: [9.0, 16.4, 82.0, 67.2] },
-  square: { img: 'home/marquee/square.png', ratio: 1.0, mode: 'window', win: [14.1, 13.7, 71.7, 72.2] },
+  vertical: { img: 'home/marquee/vertical.webp', ratio: 0.75, mode: 'window', win: [16.4, 9.0, 67.2, 82.0] },
+  circle: { img: 'home/marquee/circle.webp', ratio: 1.0, mode: 'window', win: [8.7, 9.0, 82.4, 80.4], round: true },
+  horizontal: { img: 'home/marquee/horizontal frame.webp', ratio: 1.333, mode: 'window', win: [9.0, 16.4, 82.0, 67.2] },
+  square: { img: 'home/marquee/square.webp', ratio: 1.0, mode: 'window', win: [14.1, 13.7, 71.7, 72.2] },
 };
 
-// `familiar` = id of the matching Portfolio familiar (opens its popup on click)
-// price = base amount in HKD (converted/formatted by the active currency)
+// `familiar` = id of the matching Portfolio familiar (opens its popup on click).
+// Price (HKD) and material come from that Portfolio entry so the two pages can't disagree.
 const archive = [
-  { name: 'The Professional Critic', price: 4980, material: 'gold',
-    frame: 'vertical', photo: 'home/marquee/critic-photo.webp', alt: 'Gold Pekingese pendant', familiar: 'grumpy-cotton' },
-  { name: 'The Leading Man', price: 2840, material: 'silver',
-    frame: 'circle', photo: 'home/marquee/leadingman-photo.webp', alt: 'Silver earrings', familiar: 'bleu' },
-  { name: 'The Usual Suspect', price: 2790, material: 'silver',
-    frame: 'horizontal', photo: 'home/marquee/suspect-photo.webp', alt: 'Silver corgi pendant', familiar: 'gaygay' },
-  { name: 'The Understudy', price: 2755, material: 'silver',
-    frame: 'square', photo: 'home/marquee/fourth-photo.webp', alt: 'Silver dog pendant', familiar: 'cotton' },
-];
+  { name: 'The Professional Critic', familiar: 'grumpy-cotton',
+    frame: 'vertical', photo: 'home/marquee/critic-photo.webp', alt: 'Gold Pekingese pendant' },
+  { name: 'The Leading Man', familiar: 'bleu',
+    frame: 'circle', photo: 'home/marquee/leadingman-photo.webp', alt: 'Silver earrings' },
+  { name: 'The Usual Suspect', familiar: 'gaygay',
+    frame: 'horizontal', photo: 'home/marquee/suspect-photo.webp', alt: 'Silver corgi pendant' },
+  { name: 'The Understudy', familiar: 'cotton',
+    frame: 'square', photo: 'home/marquee/fourth-photo.webp', alt: 'Silver dog pendant' },
+].map((p) => {
+  const { price, material } = familiars.find((f) => f.id === p.familiar);
+  return { ...p, price, material };
+});
 
 const filters = [
   { key: 'all', label: 'All' },
@@ -39,13 +43,13 @@ const filters = [
 
 // the 4-part commission process (illustrations in img/instruction)
 const steps = [
-  { n: '01', img: 'step1.png', title: 'The Introduction',
+  { n: '01', img: 'step1.webp', title: 'The Introduction',
     text: "Share your pet's photos and the piece you have in mind." },
-  { n: '02', img: 'step2.png', title: 'The Commission',
+  { n: '02', img: 'step2.webp', title: 'The Commission',
     text: 'We review your enquiry and return with our recommendations, material options, and an estimated quote.' },
-  { n: '03', img: 'step3.png', title: 'The Portrait',
+  { n: '03', img: 'step3.webp', title: 'The Portrait',
     text: 'A kick-off fee begins the sculpting process. Your talisman is designed for your approval.' },
-  { n: '04', img: 'step4.png', title: 'The Making',
+  { n: '04', img: 'step4.webp', title: 'The Making',
     text: 'Once approved, the portrait is cast in precious metal and finds its way to you.' },
 ];
 
@@ -60,8 +64,8 @@ function Piece({ p }) {
   return (
     <Link className="piece" to={`/portfolio?familiar=${p.familiar}`}>
       <div className={`piece-frame ${f.mode}`} style={{ aspectRatio: f.ratio }}>
-        <img className="photo" style={photoStyle} src={asset(`/img/${p.photo}`)} alt={p.alt} />
-        <img className="frame" src={asset(`/img/${f.img}`)} alt="" />
+        <img className="photo" style={photoStyle} loading="lazy" src={asset(`/img/${p.photo}`)} alt={p.alt} />
+        <img className="frame" loading="lazy" src={asset(`/img/${f.img}`)} alt="" />
       </div>
       <div className="piece-cap">
         <div className="name">{p.name}</div>
@@ -120,12 +124,12 @@ export default function Home() {
       {/* HERO */}
       <section className="hero">
         <div className="hero-art">
-          <img className="hero-photo" src={asset("/img/home/enquiry/headbackground.png")} alt="A woman with her dog and puppies" />
+          <img className="hero-photo" src={asset("/img/home/enquiry/headbackground.webp")} alt="A woman with her dog and puppies" />
           <div className="hero-copy">
             <h1 className="display">Every talisman<br />begins with a face<br />you know by heart.</h1>
             <p className="hero-sub">Turn your beloved companion into a one-of-a-kind, handcrafted piece.</p>
           </div>
-          <img className="hero-stamp" src={asset("/img/logos/stamp.png")} alt="" />
+          <img className="hero-stamp" src={asset("/img/logos/stamp.webp")} alt="" />
         </div>
         <aside className="hero-form">
           <EnquiryForm />
@@ -156,16 +160,16 @@ export default function Home() {
 
       {/* BESPOKE PROMISE + COMMISSION PROCESS */}
       <section className="bespoke">
-        <img className="blossom r" src={asset("/img/home/instruction/peach blossom.png")} alt="" />
+        <img className="blossom r" loading="lazy" src={asset("/img/home/instruction/peach blossom.webp")} alt="" />
         <div className="container">
-          <img className="hero-stamp" src={asset("/img/logos/stamp.png")} alt="" />
+          <img className="hero-stamp" src={asset("/img/logos/stamp.webp")} alt="" />
           <p className="promise-label">our <b>Bespoke</b> promise to you</p>
           <p className="promise">To make something that could only belong to you &mdash;<br/> and only look like them</p>
           <ol className="commission">
             {steps.map((s) => (
               <li className="cstep" key={s.n}>
                 <div className="cnum">{s.n}</div>
-                <img className="cimg" src={asset(`/img/home/instruction/${s.img}`)} alt="" />
+                <img className="cimg" loading="lazy" src={asset(`/img/home/instruction/${s.img}`)} alt="" />
                 <h4>{s.title}</h4>
                 <p>{s.text}</p>
               </li>
@@ -176,7 +180,7 @@ export default function Home() {
 
       {/* NOTE FROM THE WORKSHOP */}
       <section className="note">
-        <img src={asset("/img/story/home-story.png")} alt="" />
+        <img loading="lazy" src={asset("/img/story/home-story.webp")} alt="" />
         <div className="inner">
           <span className="eyebrow">A note from the workshop</span>
           <p>We believe that the animals beside us are more than companions.</p>

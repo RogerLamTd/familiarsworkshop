@@ -51,7 +51,7 @@ export default function Nav({ over }) {
           ))}
           <CurrencyToggle />
           <Link className="nav-cta" to="/contact" onClick={() => setOpen(false)}>
-            <img src={asset('/img/home/enquiry/customfamiliarbutton.png')} alt="Custom Familiar" />
+            <img src={asset('/img/home/enquiry/customfamiliarbutton.webp')} alt="Custom Familiar" />
           </Link>
         </nav>
       </div>

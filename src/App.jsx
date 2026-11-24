@@ -8,8 +8,15 @@ import Portfolio from './pages/Portfolio.jsx';
 import Contact from './pages/Contact.jsx';
 import FAQ from './pages/FAQ.jsx';
 
+// per-page browser tab / search titles; home keeps the full title from index.html
+const HOME_TITLE = document.title;
+const TITLES = { '/story': 'Our Story', '/portfolio': 'Portfolio', '/faq': 'FAQ', '/contact': 'Contact' };
+
 export default function App() {
   const { pathname, hash } = useLocation();
+  useEffect(() => {
+    document.title = TITLES[pathname] ? `${TITLES[pathname]} — Familiars Workshop` : HOME_TITLE;
+  }, [pathname]);
   // SPA scroll handling: jump to #hash target if present, else top of page.
   // Images above the target load async and shift layout, so re-pin whenever a
   // still-loading image finishes (plus timed fallbacks) until things settle.

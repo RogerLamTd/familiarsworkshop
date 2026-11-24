@@ -2,49 +2,10 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { asset } from '../utils/assets';
 import { useFormatPrice } from '../utils/currency.jsx';
+import { familiars } from '../data/familiars.js';
 
-// `file` lives in both img/portfolio/dogview and img/portfolio/charmview; `photos`
-// are the shots in img/portfolio/<slug>/ (slug = file without extension).
 // material key -> label shown in the modal; extend as needed
 const materials = { silver: '925 Sterling Silver', gold: '10k Yellow Gold' };
-const familiars = [
-  { id: 'teddy', name: 'Teddy', price: 2840, file: 'teddy.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Mixed Breed', origin: 'Canada', material: 'silver', size: '18mm (H) × 15mm (W) × 14mm (D)',
-    familiar: "Teddy stirs up mischief unless he's the star. He loves splashes, chin rubs, and birds.",
-    portrait: "We focused on his soulful eyes and gentle muzzle to preserve his mature character." },
-  { id: 'lila', name: 'Lila', price: 2756, file: 'lila.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Pomeranian', origin: 'Hong Kong', material: 'silver', size: '18mm (H) × 15mm (W) × 12mm (D)',
-    familiar: "A little ball of sunshine with a permanent smile, bright eyes, and ears that seem to have a mind of their own.",
-    portrait: "We focused on her lively eyes, playful smile, and fluffy cheeks, preserving the little details that make this face unmistakable." },
-  { id: 'boji', name: 'Boji', price: 2790, file: 'boji.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Border Collie', origin: 'Hong Kong', material: 'silver', size: '18mm (H) × 15mm (W) × 12mm (D)',
-    familiar: "Hailing from one of the smartest dog breeds, he's delightfully goofy and not the sharpest.",
-    portrait: "We focused on his flowing fluffy fur and heterochromatic eyes to capture his joyful essence." },
-  { id: 'bingbing', name: 'BingBing', price: 2735, file: 'bingbing.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Pomeranian', origin: 'Hong Kong', material: 'silver', size: '19mm (H) × 12mm (W) × 13mm (D)',
-    familiar: "A little lady with big, curious eyes and a wardrobe that suggests she knows exactly how adorable she is.",
-    portrait: "We captured her gentle gaze, delicate muzzle, fluffy cheeks, and signature bow to preserve her sweet, unmistakable charm." },
-  { id: 'hungry-bleu', name: 'Hungry Bleu', price: 2780, file: 'bleuhungry.jpg', photos: ['1.jpg', '2.jpg', '3.png'],
-    breed: 'Schnauzer', origin: 'Hong Kong', material: 'silver', size: '17mm (H) × 13mm (W) × 14mm (D)',
-    familiar: "Quite the ladies' man, with a magnificent moustache and a constant need to be adored.",
-    portrait: "We focused on his bushy brows, floppy ears, signature schnauzer beard, and playful tongue to capture his irresistible charm." },
-  { id: 'bleu', name: 'Bleu', price: 2770, file: 'bleu.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Schnauzer', origin: 'Hong Kong', material: 'silver', size: '17mm (H) × 13mm (W) × 14mm (D)',
-    familiar: "Quite the ladies' man, with a magnificent moustache and a constant need to be adored.",
-    portrait: "We focused on his bushy brows, floppy ears, and signature schnauzer beard to capture his irresistible charm." },
-  { id: 'gaygay', name: 'Gay-Gay', price: 2700, file: 'gaygay.jpg', photos: ['1.jpg', '2.jpg', '3.JPG'],
-    breed: 'Corgi', origin: 'Hong Kong', material: 'silver', size: '19mm (H) × 13mm (W) × 13mm (D)',
-    familiar: "A happy little fellow with a contagious smile, oversized ears, and a face that makes saying no nearly impossible.",
-    portrait: "We focused on his perky ears, round expressive eyes, fluffy cheeks, and signature tongue-out smile to capture his cheerful spirit." },
-  { id: 'grumpy-cotton', name: 'Grumpy Cotton', price: 4980, file: 'cottongrumpy.jpg', photos: ['1.jpg', '2.jpg', '3.JPG'],
-    breed: 'Pekingese', origin: 'Hong Kong', material: 'gold', size: '14mm (H) × 12mm (W) × 10mm (D)',
-    familiar: "A little royal with a permanently unimpressed expression, who expects to be treated like the most important person in the room.",
-    portrait: "We focused on those sleepy eyes, rounded muzzle, signature underbite, and soft floppy ears to preserve his adorably stern expression." },
-  { id: 'cotton', name: 'Cotton', price: 2840, file: 'cotton.jpg', photos: ['1.jpg', '2.jpg', '3.jpg'],
-    breed: 'Pekingese', origin: 'Hong Kong', material: 'silver', size: '14mm (H) × 12mm (W) × 10mm (D)',
-    familiar: "A little royal who rarely cracks a smile. When he does, it's quite the occasion.",
-    portrait: "We focused on his rare little smile, rounded muzzle, gentle eyes, and floppy ears to preserve a softer side of his usually serious expression." },
-];
 
 const VIEWS = { dog: 'dogview', pendant: 'charmview' };
 
@@ -141,7 +102,7 @@ export default function Portfolio() {
       <div className="arch-grid">
         {familiars.map((f) => (
           <button className="arch-card" key={f.id} onClick={() => setSel(f)}>
-            <div className="arch-img"><img src={src(f)} alt={f.name} /></div>
+            <div className="arch-img"><img loading="lazy" src={src(f)} alt={f.name} /></div>
             <div className="arch-cap">
               <span className="name">{f.name}</span>
               <span className="price">{fmt(f.price)}</span>

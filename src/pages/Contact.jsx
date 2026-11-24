@@ -11,7 +11,7 @@ export default function Contact() {
           <div className="hero-copy">
             <h1 className="display">Get in touch<br />with our<br />craftspeople</h1>
           </div>
-          <img className="hero-stamp" src={asset('/img/logos/stamp.png')} alt="" />
+          <img className="hero-stamp" src={asset('/img/logos/stamp.webp')} alt="" />
         </div>
         <aside className="hero-form">
           <EnquiryForm />

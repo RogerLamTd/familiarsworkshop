@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { asset } from '../utils/assets';
 
-const SEND_BTN = '/img/home/enquiry/sendenquirybutton.png';
+const SEND_BTN = '/img/home/enquiry/sendenquirybutton.webp';
 const MATERIALS = {
   'Silver': ['S925'],
   'Yellow Gold': ['YG9K', 'YG14K', 'YG18K', 'YG24K'],
@@ -91,6 +91,7 @@ export default function EnquiryForm() {
     widget.current = window.turnstile?.render(ts.current, {
       sitekey: import.meta.env.VITE_TURNSTILE_SITE_KEY,
       appearance: 'interaction-only', // hidden unless Cloudflare wants a click, so the layout holds
+      theme: 'light', // matches the cream card even when the OS is in dark mode
     });
     return () => widget.current && window.turnstile.remove(widget.current);
   }, []);

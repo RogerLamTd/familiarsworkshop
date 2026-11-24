@@ -30,7 +30,7 @@ export default function Footer() {
         </div>
         <div>
           <h5>Contact</h5>
-          <p className="contact-txt">Email us at<br />business@familiarsworkshop.com</p>
+          <p className="contact-txt">Email us at<br /><a href="mailto:business@familiarsworkshop.com">business@familiarsworkshop.com</a></p>
         </div>
       </div>
     </footer>

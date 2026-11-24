@@ -15,6 +15,10 @@
   --tan:#c8ac78;
   --ink:#1d1b17;
   --muted:#5b5648;
+  --line:#b9b199;     /* field + photo-slot borders */
+  --field:#fbf8ec;    /* input backgrounds */
+  --text-soft:#333;   /* secondary body copy */
+  --alert:#a5432f;    /* required marker, form errors */
   --caps:'Garabosse Parangon',serif;
   --serif:'Garabosse Gaillarde',serif;
   --body:'Garabosse Mignonne',serif;
@@ -72,9 +76,6 @@ a{color:inherit;text-decoration:none}
   letter-spacing:.14em;text-transform:uppercase;font-size:14px;padding:16px 30px;border:0;cursor:pointer;
   text-align:center;transition:background .2s}
 .btn:hover{background:var(--green-d)}
-.btn--block{display:block;width:100%}
-.btn--tan{background:var(--tan);color:var(--ink)}
-.btn--tan:hover{background:#b89a63}
 
 /* ---------- headings ---------- */
 .display{font-family:var(--caps);color:var(--green);font-weight:700;line-height:1.06;
@@ -85,7 +86,7 @@ a{color:inherit;text-decoration:none}
 
 /* ---------- home hero ---------- */
 /* full-screen: nav overlays the top, so the photo runs edge-to-edge incl. nav row */
-.hero{display:grid;grid-template-columns:1.5fr 1fr;height:100vh}
+.hero{display:grid;grid-template-columns:1.5fr 1fr;min-height:100vh}  /* min: grows rather than clip the form on short windows */
 /* left: photo bleeds full, copy vertically centered on top */
 .hero-art{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-start}
 /* Head background.png is pre-cropped with the cream fade baked in */
@@ -100,21 +101,28 @@ a{color:inherit;text-decoration:none}
   background:linear-gradient(180deg,rgba(248,244,227,.82) 0%,rgba(248,244,227,.45) 40%,rgba(248,244,227,.2) 100%)}
 /* right: parchment panel with inset gold-bordered, rounded form card */
 .hero-form{background:var(--cream2);display:flex;align-items:center;padding:104px 20px 16px}  /* top pad clears the overlaid nav */
-.hero-card{width:100%;border:1.5px solid var(--gold);border-radius:18px;padding:22px 26px;background:rgba(255,255,255,.14)}
-.hero-card h2{font-family:var(--serif);color:var(--ink);font-weight:600;font-size:25px;margin:0 0 14px}
-.hero-card .field{margin-bottom:10px}
-.hero-card .field label,.hero-card .field-label{margin-bottom:4px}
-.field-label i{font-size:14px;color:#9c947f}
-.hero-card .field input,.hero-card .field select,.hero-card .field textarea{padding:8px 12px;border-radius:9px}
-.hero-card .field textarea{min-height:60px}
+/* compact card (home + contact) so the whole form fits in the first view */
+.hero-card{width:100%;border:1.5px solid var(--gold);border-radius:18px;padding:14px 22px;background:rgba(255,255,255,.14)}
+.hero-card h2{font-family:var(--serif);color:var(--ink);font-weight:600;font-size:22px;margin:0 0 8px}
+.hero-card .field{margin-bottom:7px}
+.hero-card .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hero-card .field label,.hero-card .field-label{font-size:15px;margin-bottom:3px}
+.hero-card .field label b{color:var(--alert);font-weight:400}  /* required marker */
+.field-label i{font-size:14px;color:var(--muted)}
+.hero-card .field input,.hero-card .field select,.hero-card .field textarea{font-size:15px;padding:6px 11px;border-radius:9px}
+.hero-card .field textarea{min-height:44px}
+.hero-card .send-btn{margin-top:4px}
+.hero-card .send-btn img{height:66px}
 /* reference photos: one large main slot over a 3-up auxiliary grid */
-.field .refs{display:grid;grid-template-columns:repeat(3,1fr);border:1px dashed #b9b199;border-radius:9px;
-  overflow:hidden;background:#fbf8ec}
+.field .refs{display:grid;grid-template-columns:repeat(3,1fr);border:1px dashed var(--line);border-radius:9px;
+  overflow:hidden;background:var(--field)}
 .field .refs label{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
   gap:4px;margin:0;min-height:60px;cursor:pointer;color:var(--ink);font-size:14px;line-height:1.3;text-align:center;
-  border-top:1px dashed #b9b199}
-.field .refs label + label + label{border-left:1px dashed #b9b199}
+  border-top:1px dashed var(--line)}
+.field .refs label + label + label{border-left:1px dashed var(--line)}
 .field .refs .ref-main{grid-column:1/-1;min-height:110px;border:0}
+.hero-card .refs label{min-height:46px;font-size:13px}
+.hero-card .refs .ref-main{min-height:76px}
 .field .refs label:focus-within{outline:2px solid var(--green);outline-offset:-2px}
 .field .refs input{position:absolute;inset:0;width:1px;height:1px;padding:0;opacity:0}
 .field .refs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -127,29 +135,16 @@ a{color:inherit;text-decoration:none}
 .photo-dialog::backdrop{background:rgba(0,0,0,.45)}
 .photo-dialog h3{font-family:var(--serif);font-size:20px;margin:0 0 12px}
 .photo-dialog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
-.photo-dialog .thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid #b9b199;background:#fbf8ec}
+.photo-dialog .thumb{position:relative;aspect-ratio:1;border-radius:8px;overflow:hidden;border:1px solid var(--line);background:var(--field)}
 .photo-dialog .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo-dialog .thumb button{position:absolute;top:4px;right:4px;width:24px;height:24px;border:0;border-radius:50%;
   background:rgba(0,0,0,.6);color:#fff;font-size:16px;line-height:1;cursor:pointer}
 .photo-dialog .thumb.add{border-style:dashed;font-family:var(--body);font-size:15px;color:var(--ink);cursor:pointer}
 .photo-dialog-done{display:block;margin:14px 0 0 auto;padding:7px 20px;border:1px solid var(--green);border-radius:18px;
   background:var(--green);color:#fff;font-family:var(--body);font-size:15px;cursor:pointer}
-.refs i{font-style:italic;color:#9c947f;font-size:12px}
+.refs i{font-style:italic;color:var(--muted);font-size:12px}
 /* placeholder text lighter than typed input, matching the mockup */
 .hero-card ::placeholder{color:#aaa290;opacity:1}
-/* compact card (home + contact) so the whole form fits in the first view */
-.hero-card{padding:14px 22px}
-.hero-card h2{font-size:22px;margin-bottom:8px}
-.hero-card .field{margin-bottom:7px}
-.hero-card .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hero-card .field label b{color:#a5432f;font-weight:400}  /* required marker */
-.hero-card .field label,.hero-card .field-label{font-size:15px;margin-bottom:3px}
-.hero-card .field input,.hero-card .field select,.hero-card .field textarea{font-size:15px;padding:6px 11px}
-.hero-card .field textarea{min-height:44px}
-.hero-card .refs label{min-height:46px;font-size:13px}
-.hero-card .refs .ref-main{min-height:76px}
-.hero-card .send-btn{margin-top:4px}
-.hero-card .send-btn img{height:66px}
 @media (max-height:800px){  /* short laptop screens */
   .hero-form{padding-top:104px;padding-bottom:8px}
   .hero-card h2{font-size:20px;margin-bottom:4px}
@@ -162,14 +157,22 @@ a{color:inherit;text-decoration:none}
   .field .refs .ref-main img.slot-icon{height:34px}
   .hero-card .send-btn img{height:54px}
 }
+@media (max-height:720px) and (orientation:landscape){  /* short + narrow windows: photo slots in one row */
+  .hero-card .refs{grid-template-columns:repeat(4,1fr)}
+  .hero-card .refs .ref-main{grid-column:auto;min-height:46px}
+  .hero-card .refs label{border-top:0}
+  .hero-card .refs label + label{border-left:1px dashed var(--line)}
+  .field .refs .ref-main img.slot-icon{height:24px}
+  .hero-card .send-btn img{height:46px}
+}
 .send-btn{display:block;width:100%;margin-top:8px;text-align:center;background:none;border:0;cursor:pointer;transition:opacity .2s}
 .send-btn:hover{opacity:.9}
 .send-btn:disabled{opacity:.5;cursor:wait}
-.form-error{color:#a5432f;font-size:14px;margin:6px 0 0}
+.form-error{color:var(--alert);font-size:14px;margin:6px 0 0}
 .send-btn img{display:inline-block;height:80px;width:auto}
 
 /* ---------- archive (grid portfolio) ---------- */
-.archive-page{padding:48px 0 90px}
+.archive-page{padding-block:48px 90px}
 .arch-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
 .arch-head .serif-h{font-size:44px}
 .arch-head .sec-sub{margin-top:8px}
@@ -217,9 +220,9 @@ a{color:inherit;text-decoration:none}
 .arch-specs{display:grid;grid-template-columns:auto 1fr;gap:6px 24px;margin:0 0 20px;font-size:16px}
 .arch-specs div{display:contents}
 .arch-specs dt{color:var(--ink);font-weight:600}
-.arch-specs dd{margin:0;color:#333}
+.arch-specs dd{margin:0;color:var(--text-soft)}
 .arch-modal h3{font-family:var(--serif);color:var(--ink);font-size:18px;margin:16px 0 3px}
-.arch-modal p{font-size:16px;color:#333;margin:0;line-height:1.5}
+.arch-modal p{font-size:16px;color:var(--text-soft);margin:0;line-height:1.5}
 @keyframes arch-fade{from{opacity:0}to{opacity:1}}
 @keyframes arch-pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 
@@ -227,20 +230,17 @@ a{color:inherit;text-decoration:none}
 .field{margin-bottom:16px}
 .field label,.field-label{display:block;font-family:var(--body);font-size:17px;color:var(--ink);margin-bottom:6px}
 .field input,.field select,.field textarea{width:100%;font-family:var(--body);font-size:17px;padding:11px 13px;
-  border:1px solid #b9b199;background:#fbf8ec;color:var(--ink);border-radius:2px}
+  border:1px solid var(--line);background:var(--field);color:var(--ink);border-radius:2px}
 .field textarea{min-height:110px;resize:none}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green)}
-.form-note{font-size:15px;color:var(--muted);margin:10px 0 14px}
 
 /* ---------- section headers ---------- */
-.sec{padding:56px 0;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.sec{padding-block:56px;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
 .sec-head{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
 .sec-head .serif-h{font-size:42px}
-.sec-head .tag{font-family:var(--caps);color:var(--green);font-size:14px;letter-spacing:.14em}
 .sec-sub{font-family:var(--serif);color:var(--ink);font-size:20px;margin:6px 0 0}
 
 /* ---------- archive ---------- */
-.archive-row{display:flex;gap:34px;overflow-x:auto;padding:34px 4px 14px;scroll-snap-type:x mandatory}
 .piece{flex:0 0 auto;scroll-snap-align:start;text-align:center}
 /* height is fixed; width follows each frame's natural aspect-ratio (set inline) */
 .piece-frame{position:relative;height:340px;margin:0 auto}
@@ -277,14 +277,6 @@ a{color:inherit;text-decoration:none}
 .commission h4{font-family:var(--serif);color:var(--green);font-size:24px;font-weight:600;margin:0 0 10px}
 .commission p{font-size:15px;color:var(--muted);line-height:1.45;max-width:17em;margin:0 auto}
 
-/* ---------- ready to begin ---------- */
-.ready{display:grid;grid-template-columns:.7fr 1.3fr;gap:40px;align-items:center;padding:20px 0 70px}
-.ready .oval{max-width:230px;margin:0 auto}
-.ready h2{font-family:var(--serif);color:var(--green);font-size:44px;font-weight:500;margin:0 0 14px}
-.ready h2 b{font-weight:700}
-.ready p{margin:0 0 14px;color:#2a2822}
-.ready .btn{margin-top:8px;padding-left:60px;padding-right:60px}
-
 /* ---------- note band ---------- */
 .note{position:relative;color:var(--green);text-align:right;overflow:hidden}
 .note img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0}
@@ -293,7 +285,7 @@ a{color:inherit;text-decoration:none}
 .note .eyebrow{color:var(--green);display:block;margin-bottom:18px}
 .note p{font-family:var(--serif);font-size:26px;line-height:1.5;margin:0 0 4px;max-width:900px;margin-left:auto}
 .note .brandline{font-weight:700}
-.note .readlink{display:inline-block;margin-top:22px;font-family:var(--caps);font-weight:.12em;font-size:15px}
+.note .readlink{display:inline-block;margin-top:22px;font-family:var(--caps);letter-spacing:.12em;font-size:15px}
 
 /* ---------- story ---------- */
 .story-hero{position:relative;border-radius:14px;overflow:hidden;margin:26px 0 60px}
@@ -301,7 +293,7 @@ a{color:inherit;text-decoration:none}
 .story-hero .hero-dog{position:absolute;z-index:2;left:22%;bottom:-8%;width:360px;height:auto;pointer-events:none}
 .story-hero .cap{position:absolute;top:0;left:0;padding:44px;max-width:520px;color:#f4efdc;
   font-family:var(--serif);z-index:2}
-.story-hero .cap b{display:block;font-size:34px;font-weight:700;margin-bottom:8px}
+.story-hero .cap h1{font-size:34px;font-weight:700;margin:0 0 8px}
 .story-hero .cap span{font-size:28px;font-style:italic}
 .story-hero::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,40,25,.45),transparent 60%);z-index:1}
 /* two-column story: ink illustrations inline with the narrative text */
@@ -324,42 +316,13 @@ a{color:inherit;text-decoration:none}
 .story-card .bot{position:absolute;z-index:2;right:44px;bottom:36px;text-align:right;font-family:var(--serif);
   font-size:26px;color:#f2f0e2;text-shadow:0 1px 6px rgba(0,0,0,.35)}
 
-/* ---------- portfolio ---------- */
-.case{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;align-items:stretch;padding:44px 0;border-bottom:1px solid rgba(0,0,0,.06);scroll-margin-top:90px}
-.case .main{border-radius:14px;overflow:hidden}
-.case .main img{width:100%;height:100%;object-fit:cover;min-height:320px}
-.case .stack{display:grid;grid-template-rows:1fr 1fr;gap:20px}
-.case .stack img{width:100%;height:100%;object-fit:cover;border-radius:14px}
-.case .info{padding:6px 4px}
-.case .info h3{font-family:var(--serif);color:var(--green);font-size:26px;margin:0}
-.case .info .breed{font-family:var(--serif);color:var(--green);font-size:16px;margin:2px 0 18px}
-.case .specs{display:grid;grid-template-columns:auto 1fr;gap:4px 24px;margin-bottom:16px;font-size:17px}
-.case .specs dt{color:var(--ink)}
-.case .specs dd{margin:0;color:#333}
-.case .info h4{font-family:var(--serif);color:var(--ink);font-size:18px;margin:14px 0 2px}
-.case .info p{font-size:17px;margin:0 0 4px;color:#333}
-.case .info .btn{margin-top:20px}
-.case--hand .info{display:flex;flex-direction:column;justify-content:center;text-align:center}
-.case--hand .info p{font-family:var(--hand);font-size:26px;line-height:1.35;color:var(--green)}
-
-/* ---------- shop ---------- */
-.shop-wrap{padding:50px 0}
-.shop-card{background:#fff;border-radius:6px;padding:40px;text-align:center;margin-bottom:44px;box-shadow:0 2px 20px rgba(0,0,0,.04)}
-.shop-card .lead{color:var(--muted);margin-bottom:22px}
-.shop-card img{margin:0 auto 26px}
-.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;text-align:center;margin:10px 0 30px}
-.steps .step .num{font-family:var(--caps);letter-spacing:.2em;color:var(--muted);font-size:12px}
-.steps .step h4{font-family:var(--serif);color:var(--ink);font-weight:1000;font-size:19px;margin:14px 0 8px}
-.steps .step p{font-size:15px;color:var(--muted);line-height:1.4}
-
-
 /* ---------- faq ---------- */
-.faq{padding:50px 0;max-width:900px;margin:0 auto}
+.faq{padding-block:50px;max-width:900px;margin:0 auto}
 .faq h1{font-family:var(--caps);color:var(--green);font-size:46px;text-transform:uppercase;margin:0 0 30px}
 .faq h2{font-family:var(--serif);color:var(--green);font-size:26px;margin:38px 0 14px;border-bottom:1px solid rgba(0,0,0,.1);padding-bottom:8px}
 .faq h3{font-family:var(--serif);color:var(--green);font-size:13px;font-weight:400;opacity: 0.6;margin:-8px 0 0px;border-top:0px;border-bottom:1px transparent rgba(0, 0, 0, 0.1);padding-bottom:5px}
 .faq dt{font-family:var(--serif);font-weight:600;color:var(--ink);margin-top:16px;font-size:19px}
-.faq dd{margin:4px 0 0;color:#333}
+.faq dd{margin:4px 0 0;color:var(--text-soft)}
 
 /* ---------- footer ---------- */
 .footer{background:var(--cream);padding:60px 0 70px;margin-top:40px}
@@ -376,8 +339,9 @@ a{color:inherit;text-decoration:none}
 .footer-logo{display:none}
 
 /* ---------- responsive ---------- */
-/* phones: one column everywhere, hamburger nav, smaller type */
-@media (max-width:760px){
+/* phones + portrait tablets: one column everywhere, hamburger nav, smaller type.
+   Landscape windows up to 1024px keep the desktop one-section-per-screen layout. */
+@media (max-width:760px), (max-width:1024px) and (orientation:portrait){
   html{scroll-snap-type:none}
   body{font-size:17px}
   .container{padding:0 18px}
@@ -388,7 +352,7 @@ a{color:inherit;text-decoration:none}
   .nav-links.open{display:flex}
   .nav-cta img{height:72px;margin:-8px 0}
   /* hero: photo + headline, then the form below */
-  .hero{grid-template-columns:1fr;height:auto}
+  .hero{grid-template-columns:1fr;min-height:0}
   .hero-art{min-height:80svh}
   .hero-copy{padding:110px 20px 0}
   .hero-copy h1{font-size:34px}
@@ -396,30 +360,26 @@ a{color:inherit;text-decoration:none}
   .hero-form{padding:24px 12px 32px}
   .hero-card .field-row{grid-template-columns:1fr;gap:0}
   .hero-card .field input,.hero-card .field select,.hero-card .field textarea{font-size:16px}  /* <16px makes iOS zoom on focus */
-  .sec,.bespoke{min-height:0;padding:48px 0}
-  .sec.container{padding:48px 18px}  /* .sec's padding was wiping the container's side margins */
+  .sec,.bespoke{min-height:0;padding-block:48px}
   .sec .archive-wrap{margin:0 -18px}  /* marquee still runs edge to edge */
   .sec-head .serif-h,.arch-head .serif-h{font-size:32px}
   .commission{grid-template-columns:1fr 1fr;gap:28px 14px;margin-top:36px}
   .cimg{height:100px}
   .commission h4{font-size:20px}
-  .ready{grid-template-columns:1fr;text-align:center;gap:20px}
-  .ready h2{font-size:32px}
   .piece-frame{height:240px}
   .archive-static{justify-content:flex-start;overflow-x:auto}
   .note .inner{padding:70px 18px}
   .note p{font-size:20px}
   .story-hero .hero-dog{width:150px}
   .story-hero .cap{padding:18px}
-  .story-hero .cap b{font-size:22px}
+  .story-hero .cap h1{font-size:22px}
   .story-hero .cap span{font-size:18px}
   .story-grid{grid-template-columns:1fr}
   .story-card{min-height:440px}
   .story-card .top{padding:24px}
   .story-card .top .big{font-size:22px}
   .story-card .bot{right:20px;bottom:20px;font-size:18px}
-  .case,.arch-grid{grid-template-columns:1fr 1fr}
-  .case .info{grid-column:1/-1}
+  .arch-grid{grid-template-columns:1fr 1fr}
   .arch-modal{padding:24px 20px}
   .view-toggle--float{top:auto;bottom:16px;right:16px;transform:none;flex-direction:row}
   .view-toggle--float button+button{border-top:0;border-left:1px solid rgba(38,74,48,.2)}
@@ -435,7 +395,12 @@ a{color:inherit;text-decoration:none}
   .hero-card .field input,.hero-card .field select{min-height:44px}
   .footer li{margin:0}
   .footer li a{display:inline-block;padding:11px 0}
-  .steps{grid-template-columns:1fr 1fr}
+}
+/* portrait tablets: same stacked layout, but use the extra width */
+@media (min-width:600px) and (max-width:1024px) and (orientation:portrait){
+  .hero-copy h1{font-size:46px}
+  .hero-card .field-row{grid-template-columns:1fr 1fr;gap:10px}
+  .arch-grid{grid-template-columns:repeat(3,1fr)}
 }
 /* ---------- interactive additions (React) ---------- */
 .archive-filter{display:flex;gap:8px}
@@ -445,11 +410,8 @@ a{color:inherit;text-decoration:none}
 .filter-btn:hover{background:rgba(38,74,48,.08)}
 .filter-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
 
-.case .stack .thumb{cursor:pointer;transition:opacity .2s,transform .2s}
-.case .stack .thumb:hover{opacity:.85;transform:scale(1.01)}
-
 .form-sent{font-family:var(--serif);color:var(--green);font-size:19px;line-height:1.5;
-  background:#fbf8ec;border:1px solid #b9b199;border-radius:2px;padding:22px 24px}
+  background:var(--field);border:1px solid var(--line);border-radius:2px;padding:22px 24px}
 
 .faq-item{border-bottom:1px solid rgba(0,0,0,.1)}
 .faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:18px;
@@ -457,7 +419,7 @@ a{color:inherit;text-decoration:none}
   font-family:var(--serif);font-weight:600;color:var(--ink);font-size:19px}
 .faq-q:hover{color:var(--green)}
 .faq-mark{font-family:var(--serif);color:var(--green);font-size:24px;line-height:1;flex:none}
-.faq-a{margin:0 0 16px;color:#333}
+.faq-a{margin:0 0 16px;color:var(--text-soft)}
 
 /* slow auto-scrolling archive marquee */
 .marquee{overflow:hidden;padding:34px 0 14px}
@@ -473,3 +435,9 @@ a{color:inherit;text-decoration:none}
 .archive-measure{position:absolute;visibility:hidden;height:0;overflow:hidden;display:flex;gap:34px;white-space:nowrap}
 .marquee:hover .marquee-track{animation-play-state:paused}
 @keyframes marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .marquee{overflow-x:auto}
+  .marquee-track{animation:none}
+}
