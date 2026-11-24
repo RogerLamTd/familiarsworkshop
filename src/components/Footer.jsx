@@ -1,11 +1,16 @@
 import { Link } from 'react-router-dom';
 import { Brand } from './Nav.jsx';
+import { asset } from '../utils/assets';
 
 export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
         <Brand />
+        {/* stacked logo, swapped in for <Brand /> on phones via CSS */}
+        <Link className="footer-logo" to="/">
+          <img src={asset('img/logos/mobile-logo.svg')} alt="Familiars Workshop" />
+        </Link>
         <div>
           <h5>Company</h5>
           <ul>
