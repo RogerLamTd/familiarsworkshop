@@ -69,7 +69,7 @@ export default function Nav({ over }) {
       {promo && (
         <dialog ref={dlg} className="promo" aria-label="Christmas Collection" onClose={closePromo}>
           <a href="https://familiarsworkshop.myshopify.com/" target="_blank" rel="noopener" onClick={closePromo}>
-            <img src={asset('/img/home/christmas-banner/festive-banner-text.webp')} alt="Christmas Collection out now — click here (opens in a new tab)" />
+            <img src={asset('/img/home/christmas-banner/christmas-banner-text.webp')} alt="Christmas Collection out now — click here (opens in a new tab)" />
           </a>
           <button className="promo-close" onClick={closePromo} aria-label="Close">&times;</button>
         </dialog>
